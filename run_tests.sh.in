@@ -1,7 +1,7 @@
 #! /bin/sh
 set -e
 
-output_prefix=$2
+output_prefix=$1
 
 d=$(date +%Y-%m-%d)
 
@@ -32,7 +32,7 @@ source @MINC_TOOLKIT_PREFIX@/minc-toolkit-config.sh
 # 2 setup pipeline parameters
 anatomical_model=mni_icbm152_t1_tal_nlin_sym_09c
 model_directory=@MINC_TOOLKIT_PREFIX@/share/icbm152_model_09c
-data_prefix=@MINC_TOOLKIT_PREFIX@/share/testsuit
+data_prefix=@MINC_TOOLKIT_PREFIX@/share/testsuit/icbm_data
 # 3 run the pipeline for the first subject
 
 echo Processing subject 00200... |tee -a $log_file
@@ -80,12 +80,16 @@ echo |tee -a $log_file
 date |tee -a $log_file
 echo |tee -a $log_file
 
-if ! cmp -q $output_prefix/00200/V1/vol/nl_00200_V1.txt $data_prefix/reference_nl_00200_V1.txt;then
+result=OK
+if ! cmp -s $output_prefix/00200/V1/vol/nl_00200_V1.txt $data_prefix/reference_nl_00200_V1.txt;then
   echo |tee -a $log_file
   echo |tee -a $log_file 
+  echo results in $output_prefix/00200/V1/vol/nl_00200_V1.txt are not the same as in |tee -a $log_file
+  echo $data_prefix/reference_nl_00200_V1.txt |tee -a $log_file
   echo Test for subject 00200 FAILED - see output in $output_prefix/00200/V1 |tee -a $log_file
   echo |tee -a $log_file
   echo |tee -a $log_file
+  result=FAIL
 else
   echo |tee -a $log_file
   echo |tee -a $log_file 
@@ -94,12 +98,15 @@ else
   echo |tee -a $log_file
 fi
 
-if ! cmp -q $output_prefix/00201/V1/vol/nl_00201_V1.txt $data_prefix/reference_nl_00200_V1.txt;then
+if ! cmp -s $output_prefix/00201/V1/vol/nl_00201_V1.txt $data_prefix/reference_nl_00201_V1.txt;then
   echo |tee -a $log_file
   echo |tee -a $log_file 
+  echo results in $output_prefix/00201/V1/vol/nl_00201_V1.txt are not the same as in |tee -a $log_file
+  echo $data_prefix/reference_nl_00201_V1.txt |tee -a $log_file
   echo Test for subject 00201 FAILED - see output in $output_prefix/00201/V1 |tee -a $log_file
   echo |tee -a $log_file
   echo |tee -a $log_file
+  result=FAIL
 else
   echo |tee -a $log_file
   echo |tee -a $log_file 
@@ -109,3 +116,5 @@ else
 fi
 
 echo tests are finished
+
+if [ $result != OK ];then exit 1;fi

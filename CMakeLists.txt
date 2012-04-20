@@ -39,7 +39,7 @@ INSTALL(DIRECTORY icbm_data  DESTINATION share/testsuit)
 
 CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/run_tests.sh.in  ${CMAKE_CURRENT_BINARY_DIR}/run_tests.sh @ONLY)
 
-INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/run_tests.sh DESTINATION .)
+INSTALL(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/run_tests.sh DESTINATION .)
 
 # according to http://www.cmake.org/pipermail/cmake/2011-November/047137.html it's better to put this in the end
 INCLUDE(CPack)
