@@ -1,0 +1,111 @@
+#! /bin/sh
+set -e
+
+output_prefix=$2
+
+d=$(date +%Y-%m-%d)
+
+if [ -z $output_prefix ];then
+cat - <<END 
+Usage: $0 <test_directory>
+
+Will run standard pipeline with two ICBM subjects, and place output in <test_directory>
+The copy of the log file will bi written in <test_directory>/minc-toolkit-test-$d.log
+
+END
+exit 1
+fi
+
+if [ ! -e $output_prefix ];then
+  mkdir -p $output_prefix
+fi
+
+if [ ! -d $output_prefix ];then
+  echo $output_prefix should be a directory
+  exit 1
+fi
+
+log_file=$output_prefix/minc-toolkit-test-$d.log
+# 1 setup environment
+source @MINC_TOOLKIT_PREFIX@/minc-toolkit-config.sh
+
+# 2 setup pipeline parameters
+anatomical_model=mni_icbm152_t1_tal_nlin_sym_09c
+model_directory=@MINC_TOOLKIT_PREFIX@/share/icbm152_model_09c
+data_prefix=@MINC_TOOLKIT_PREFIX@/share/testsuit
+# 3 run the pipeline for the first subject
+
+echo Processing subject 00200... |tee -a $log_file
+echo |tee -a $log_file
+date |tee -a $log_file
+echo |tee -a $log_file
+
+cmd="@MINC_TOOLKIT_PREFIX@/pipeline/standard_pipeline.pl \
+ 00200 V1 \
+ $data_prefix/mni_icbm_00200.001.t1.mnc \
+ $data_prefix/mni_icbm_00200.001.t2a.mnc \
+ $data_prefix/mni_icbm_00200.001.pda.mnc \
+ --model_dir $model_directory \
+ --model $anatomical_model \
+ --prefix $output_prefix "
+
+echo "Going to execute command:" |tee -a $log_file
+echo "$cmd" |tee -a $log_file
+
+$cmd 2>&1 |tee -a $log_file
+
+echo Done processing subject 00200... |tee -a $log_file
+
+echo Processing subject 00201... |tee -a $log_file
+echo |tee -a $log_file
+date |tee -a $log_file
+echo |tee -a $log_file
+ 
+cmd="@MINC_TOOLKIT_PREFIX@/pipeline/standard_pipeline.pl \
+ 00201 V1 \
+ $data_prefix/mni_icbm_00201.001.t1.mnc \
+ $data_prefix/mni_icbm_00201.001.t2a.mnc \
+ $data_prefix/mni_icbm_00201.001.pda.mnc \
+ --model_dir $model_directory \
+ --model $anatomical_model \
+ --prefix $output_prefix "
+ 
+echo "Going to execute command:" |tee -a $log_file
+echo "$cmd" |tee -a $log_file
+$cmd 2>&1   |tee -a $log_file
+
+echo Done processing subject 00201... |tee -a $log_file
+
+echo |tee -a $log_file
+date |tee -a $log_file
+echo |tee -a $log_file
+
+if ! cmp -q $output_prefix/00200/V1/vol/nl_00200_V1.txt $data_prefix/reference_nl_00200_V1.txt;then
+  echo |tee -a $log_file
+  echo |tee -a $log_file 
+  echo Test for subject 00200 FAILED - see output in $output_prefix/00200/V1 |tee -a $log_file
+  echo |tee -a $log_file
+  echo |tee -a $log_file
+else
+  echo |tee -a $log_file
+  echo |tee -a $log_file 
+  echo Test for subject 00200 PASSED see output in $output_prefix/00200/V1 |tee -a $log_file
+  echo |tee -a $log_file
+  echo |tee -a $log_file
+fi
+
+if ! cmp -q $output_prefix/00201/V1/vol/nl_00201_V1.txt $data_prefix/reference_nl_00200_V1.txt;then
+  echo |tee -a $log_file
+  echo |tee -a $log_file 
+  echo Test for subject 00201 FAILED - see output in $output_prefix/00201/V1 |tee -a $log_file
+  echo |tee -a $log_file
+  echo |tee -a $log_file
+else
+  echo |tee -a $log_file
+  echo |tee -a $log_file 
+  echo Test for subject 00201 PASSED see output in $output_prefix/00201/V1 |tee -a $log_file
+  echo |tee -a $log_file
+  echo |tee -a $log_file
+fi
+
+echo tests are finished
