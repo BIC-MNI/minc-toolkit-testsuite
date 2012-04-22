@@ -27,7 +27,7 @@ fi
 
 log_file=$output_prefix/minc-toolkit-test-$d.log
 # 1 setup environment
-source @MINC_TOOLKIT_PREFIX@/minc-toolkit-config.sh
+. @MINC_TOOLKIT_PREFIX@/minc-toolkit-config.sh
 
 # 2 setup pipeline parameters
 anatomical_model=mni_icbm152_t1_tal_nlin_sym_09c
