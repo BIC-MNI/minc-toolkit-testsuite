@@ -32,7 +32,7 @@ log_file=$output_prefix/minc-toolkit-test-$d.log
 # 2 setup pipeline parameters
 anatomical_model=mni_icbm152_t1_tal_nlin_sym_09c
 model_directory=@MINC_TOOLKIT_PREFIX@/share/icbm152_model_09c
-data_prefix=@MINC_TOOLKIT_PREFIX@/share/testsuit/icbm_data
+data_prefix=@MINC_TOOLKIT_PREFIX@/share/testsuite/icbm_data
 # 3 run the pipeline for the first subject
 
 echo Processing subject 00200... |tee -a $log_file

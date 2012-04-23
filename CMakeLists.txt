@@ -34,7 +34,7 @@ SET(MINC_TOOLKIT_PREFIX "${CMAKE_INSTALL_PREFIX}")
 SET(TESTSUITE_LIBRARY_PREFIX "${CMAKE_INSTALL_PREFIX}/share/testsuite")
 
 
-INSTALL(DIRECTORY icbm_data  DESTINATION share/testsuit)
+INSTALL(DIRECTORY icbm_data  DESTINATION share/testsuite)
 
 # TODO: add testing data for Lego phantom and ADNI phantom
 
