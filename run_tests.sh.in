@@ -10,7 +10,7 @@ cat - <<END
 Usage: $0 <test_directory>
 
 Will run standard pipeline with two ICBM subjects, and place output in <test_directory>
-The copy of the log file will bi written in <test_directory>/minc-toolkit-test-$d.log
+The copy of the log file will be written in <test_directory>/minc-toolkit-test-$d.log
 
 END
 exit 1
